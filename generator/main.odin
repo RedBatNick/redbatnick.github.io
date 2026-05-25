@@ -97,8 +97,11 @@ program :: proc(src_dir, dest_dir: string) -> Result {
 
 		defer strings.builder_reset(&html)
 
-		fmt.sbprint(&html, HTML_HEADER)
-		article_result := handle_article(&html, string(article_escaped))
+		fmt.sbprint(&html, HTML_HEADER_START)
+		article_result := handle_article(string(article_escaped))
+		fmt.sbprint(&html, "<title>", article_result.first_header, "</title>", sep = "")
+		fmt.sbprint(&html, HTML_HEADER_CONTENT)
+		fmt.sbprint(&html, strings.to_string(article_result.html))
 		for language in article_result.languages {
 			website_path := strings.concatenate({HIGHLIGHTJS_DIR + "languages/", language, ".min.js"})
 			os_path, _ := os.join_path({dest_dir, website_path}, context.allocator)
@@ -156,10 +159,10 @@ delete_recursive :: proc(dir: string) -> os.Error {
 }
 
 HIGHLIGHTJS_DIR :: "/highlightjs/"
-HTML_HEADER ::
+HTML_HEADER_START ::
 "<!doctype html>\n" +
-"<head>\n" +
-"   <title>Developer Logs</title>\n" +
+"<head>\n"
+HTML_HEADER_CONTENT ::
 "   <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\" />\n" +
 "   <link href=\"/style.css\" rel=\"stylesheet\" />\n" +
 "	<link href=\"" + HIGHLIGHTJS_DIR + "styles/gml.min.css\" rel=\"stylesheet\" />\n" +
@@ -175,14 +178,19 @@ HTML_FOOTER ::
 "</body>\n"
 
 HandleArticleResult :: struct {
+	html: strings.Builder,
+	first_header: string,
 	languages: map[string]bool
 }
 
-handle_article :: proc(b: ^strings.Builder, article: string) -> HandleArticleResult {
+handle_article :: proc(article: string) -> HandleArticleResult {
+	next_text_is_first_header : bool
 	root := cmark.parse_document(raw_data(article), len(article), {})
 	iter := cmark.iter_new(root)
 	tags := make([dynamic]string)
 	result := HandleArticleResult{languages = make(map[string]bool)}
+	result.html = strings.builder_make()
+	b := &result.html
 	node_index := -1
 
 	for ev := cmark.iter_next(iter); ev != .Done; ev = cmark.iter_next(iter) {
@@ -214,6 +222,9 @@ handle_article :: proc(b: ^strings.Builder, article: string) -> HandleArticleRes
 				buf: [1]byte
 				str := strconv.write_int(buf[:], i64(level), 10)
 				tag := strings.concatenate({"h", str})
+				if len(result.first_header) == 0 {
+					next_text_is_first_header = true
+				}
 				append(&tags, tag)
 				fmt.sbprint(b, "<", tag, ">", sep = "")
 
@@ -254,7 +265,12 @@ handle_article :: proc(b: ^strings.Builder, article: string) -> HandleArticleRes
 				append(&tags, "p")
 				fmt.sbprint(b, "<p>", sep = "")
 			case .Text:
-				fmt.sbprint(b, strings.clone_from_cstring(cmark.node_get_literal(node)), sep = "")
+				text := cmark.node_get_literal(node)
+				if next_text_is_first_header {
+					result.first_header, _ = strings.clone_from_cstring(text)
+					next_text_is_first_header = false
+				}
+				fmt.sbprint(b, strings.clone_from_cstring(text), sep = "")
 			}
 		case .Exit:
 			#partial switch node_type {
