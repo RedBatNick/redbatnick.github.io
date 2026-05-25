@@ -1,6 +1,6 @@
 package main
 
-import "cmark"
+import cmark "vendor:commonmark"
 import "core:fmt"
 import "core:mem"
 import "core:os"
@@ -74,14 +74,20 @@ program :: proc(src_dir, dest_dir: string) -> Result {
 			}
 			continue
 		}
+
+		abs_path := info.fullpath
+		if !os.is_absolute_path(abs_path) {
+			abs_path, _ = os.get_absolute_path(abs_path, context.allocator)
+		}
+
 		if info.type == .Directory {
-			dest, _ := os.join_path({dest_dir, info.fullpath[len(abs_src_dir):]}, context.allocator)
+			dest, _ := os.join_path({dest_dir, abs_path[len(abs_src_dir):]}, context.allocator)
 			os.make_directory(dest)
 			continue
 		}
 		name, ext := os.split_filename(info.name)
 		if ext != "md" {
-			dest, _ := os.join_path({dest_dir, info.fullpath[len(abs_src_dir):]}, context.allocator)
+			dest, _ := os.join_path({dest_dir, abs_path[len(abs_src_dir):]}, context.allocator)
 			os.copy_file(dest, info.fullpath)
 			continue
 		}
@@ -106,7 +112,7 @@ program :: proc(src_dir, dest_dir: string) -> Result {
 		fmt.sbprint(&html, HTML_FOOTER)
 
 		html_string := strings.to_string(html)
-		path, _ := os.split_filename(info.fullpath[len(abs_src_dir):])
+		path, _ := os.split_filename(abs_path[len(abs_src_dir):])
 		path, _ = os.join_path({dest_dir, path}, context.allocator)
 		path, _ = os.join_filename(path, "html", context.allocator)
 		if err := os.write_entire_file(path, html_string); err != nil {
@@ -173,29 +179,28 @@ HandleArticleResult :: struct {
 }
 
 handle_article :: proc(b: ^strings.Builder, article: string) -> HandleArticleResult {
-	article := strings.clone_to_cstring(article)
-	root := cmark.parse_document(article, len(article), 0)
+	root := cmark.parse_document(raw_data(article), len(article), {})
 	iter := cmark.iter_new(root)
 	tags := make([dynamic]string)
 	result := HandleArticleResult{languages = make(map[string]bool)}
 	node_index := -1
 
-	for ev := cmark.iter_next(iter); ev != .DONE; ev = cmark.iter_next(iter) {
+	for ev := cmark.iter_next(iter); ev != .Done; ev = cmark.iter_next(iter) {
 		node_index += 1
 		node := cmark.iter_get_node(iter)
 		node_type := cmark.node_get_type(node)
 		switch ev {
-		case .NONE:
+		case .None:
 			fmt.println("Info: Encountered", ev, "event")
 			continue
-		case .DONE:
+		case .Done:
 			break
-		case .ENTER:
+		case .Enter:
 			#partial switch node_type {
-			case .NONE:
+			case .None:
 				fmt.println("Info: Encountered", node_type, "node")
-			case .DOCUMENT:
-			case .IMAGE:
+			case .Document:
+			case .Image:
 				path := strings.clone_from_cstring(cmark.node_get_url(node))
 				_, ext := os.split_filename(path)
 				switch ext {
@@ -204,7 +209,7 @@ handle_article :: proc(b: ^strings.Builder, article: string) -> HandleArticleRes
 				case:
 					fmt.sbprint(b, "<img src=\"", path, "\"></img>", sep = "")
 				}
-			case .HEADING:
+			case .Heading:
 				level := cmark.node_get_heading_level(node)
 				buf: [1]byte
 				str := strconv.write_int(buf[:], i64(level), 10)
@@ -212,7 +217,7 @@ handle_article :: proc(b: ^strings.Builder, article: string) -> HandleArticleRes
 				append(&tags, tag)
 				fmt.sbprint(b, "<", tag, ">", sep = "")
 
-			case .LINK:
+			case .Link:
 				url := strings.clone_from_cstring(cmark.node_get_url(node))
 				scheme, host, path, queries, fragment := net.split_url(url)
 				path_split, _ := strings.split(host, ".")
@@ -227,15 +232,15 @@ handle_article :: proc(b: ^strings.Builder, article: string) -> HandleArticleRes
 					fmt.sbprint(b, "<a href=\"", url, "\">")
 					append(&tags, "a")
 				}
-			case .LIST:
+			case .List:
 				fmt.sbprint(b, "<ul>", sep = "")
 				append(&tags, "ul")
-			case .ITEM:
+			case .Item:
 				fmt.sbprint(b, "<li>", sep = "")
 				append(&tags, "li")
-			case .CODE:
+			case .Code:
 				fmt.sbprint(b, "<code>", strings.clone_from_cstring(cmark.node_get_literal(node)), "</code>", sep = "")
-			case .CODE_BLOCK:
+			case .Code_Block:
 				literal := strings.clone_from_cstring(cmark.node_get_literal(node))
 				literal, _ = strings.replace_all(literal, "\t", "    ")
 				if language := cmark.node_get_fence_info(node); len(language) > 0 {
@@ -245,15 +250,15 @@ handle_article :: proc(b: ^strings.Builder, article: string) -> HandleArticleRes
 				} else {
 					fmt.sbprint(b, "<pre><code>", literal, "\"</pre></code>", sep = "")
 				}
-			case .PARAGRAPH:
+			case .Paragraph:
 				append(&tags, "p")
 				fmt.sbprint(b, "<p>", sep = "")
-			case .TEXT:
+			case .Text:
 				fmt.sbprint(b, strings.clone_from_cstring(cmark.node_get_literal(node)), sep = "")
 			}
-		case .EXIT:
+		case .Exit:
 			#partial switch node_type {
-			case .HEADING, .PARAGRAPH, .LIST, .ITEM, .LINK:
+			case .Heading, .Paragraph, .List, .Item, .Link:
 				fmt.sbprint(b, "</", pop(&tags), ">", sep = "")
 			}
 			continue
