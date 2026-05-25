@@ -1,4 +1,4 @@
-# Rosie Times Ahead
+# Rosie Times Ahead 
 Long time no see! Over the last month, great strides have been taken towards pushing towards the end of the Great Refactor Era. So much has changed that it would be difficult to catalogue all of it. Nonetheless, today I'm excited to share with you what has come from my recent progress!
 
 # Remilia
