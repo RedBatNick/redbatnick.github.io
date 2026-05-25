@@ -4,7 +4,7 @@ Long time no see! Over the last month, great strides have been taken towards pus
 ## Remilia
 Since Boss 1 has been my primary area of focus for much of the last month, let's begin with the developments here. First, let's go back in time a bit to discuss how the project to refactor it began.
 
-### Health Bars
+### Health Bars 
 Starting in about December of last year, I had plans to overhaul health bars, giving them a whole new coat of paint and polish, tailored for each unique instance of them. This feature was a direct successor to what I made in the last released update for the game, v0.1.0.3, which made health bars shake when damaging a boss. This idea came about due to a combination of my friends urging me to do something unique, but also because of a problem I ran into while creating something in Stage 3.
 
 ![](Pasted%20image%2020260520172555.png)
