@@ -1,10 +1,10 @@
 # Rosie Times Ahead
 Long time no see! Over the last month, great strides have been taken towards pushing towards the end of the Great Refactor Era. So much has changed that it would be difficult to catalogue all of it. Nonetheless, today I'm excited to share with you what has come from my recent progress!
 
-# Remilia
+## Remilia
 Since Boss 1 has been my primary area of focus for much of the last month, let's begin with the developments here. First, let's go back in time a bit to discuss how the project to refactor it began.
 
-## Health Bars
+### Health Bars
 Starting in about December of last year, I had plans to overhaul health bars, giving them a whole new coat of paint and polish, tailored for each unique instance of them. This feature was a direct successor to what I made in the last released update for the game, v0.1.0.3, which made health bars shake when damaging a boss. This idea came about due to a combination of my friends urging me to do something unique, but also because of a problem I ran into while creating something in Stage 3.
 
 ![](Pasted%20image%2020260520172555.png)
@@ -20,7 +20,7 @@ and that's not all! I didn't stop at giving the bosses themselves unique health 
 
 ![](Runner_Px6qEE1waa.gif)
 
-## Story of the progression after Health Bars
+### Story of the progression after Health Bars
 After I finished making the new health bars, my next goal was to implement a better practice system before going back to where I left off in Stage 3. This better practice system was first and foremost meant to be a way to add full practice to Boss 2, which previously had a very limited degree of practice due to its sheer complexity. My goal was to correct this for the next update. To make a long story short, in order to put this better practice system in play, I was going to need to refactor Boss 2. This is certainly not a small task. 
 
 Due to the daunting nature of this task, It was around this time that I brought Synthasmagoria on board, and he graciously agreed to assist me in fixing up a few things and enhancing some systems while I attempted to fix this. In hindsight, there's a sense of irony to this whole thing because a big focus for me was to put a stop to having to go back and fix things earlier in the game any time something new was made, or trying to improve things in certain ways when old systems couldn't adapt anymore. 
@@ -33,14 +33,14 @@ This small little timeline has turned into an extraordinary sequence of events t
 
 None of this is to complain or cast aspersions at all though. Truthfully, I am pleased. All the hard work we've put in, and all the coding paradigms that I have been taught, not least by Synthas who I have to give mad props to for being a great teacher of programming, has resulted in the best version of the game thus far, better than I even imagined it being. I feel a great sense of power from where we stand, and believe that it would be nigh-on impossible to improve the general quality of the codebase much further.
 
-## Better Timelines
+### Better Timelines
 Shortly before my efforts to refactor Boss 1 began, Synthas created a new "Timeline" system, which is essentially a direct upgrade to the Timelines that GameMaker offers in the IDE. 
 
 The timeline system is, in my opinion, the next logical evolution of boss making in fangames. For much of history, making bosses has been a very difficult task, that only the most patient and/or dedicated makers have been able to pull off at a high level. Much of the problem stems from the fact that there's seemingly no one **great** way to make a boss, which is only natural given that fangame bosses are so robust and varied. That said, there are a few systems that have been somewhat consistent over the years.
 
 There are 3 systems that people typically use for making bosses. Here, I will list these systems, and my opinions of the pros and cons that these systems offer.
 
-### System 1: (GameMaker) Timelines Assets
+#### System 1: (GameMaker) Timelines Assets
 Pros:
 - Perform "moment" events linearly, therefore making it easy to know what's going to come next.
 - Can be fairly easily stopped and started.
@@ -51,7 +51,7 @@ Cons:
 - Are very difficult if not just straight up impossible to transfer between projects, especially prior to GMS2.
 - If you are looking at multiple timelines segmented together, it can be very difficult to determine where one ends and another begins.
 
-### System 2: Object-Based Events
+#### System 2: Object-Based Events
 Pros:
 - Allows all the code of an attack to be self-contained to an object or small group of objects, making organization easy.
 - Allows for the simplest implementations of practice tools.
@@ -61,7 +61,7 @@ Cons:
 - Often involves using a lot of alarms, which without careful planning can become quite hard to put together.
 - Hard to use on its own without another system for assistance.
 
-### System 3: Step Timer
+#### System 3: Step Timer
 Pros:
 - Just about the simplest type of timer you can use, and is very easy to write.
 - Fairly doable to put all the code of a boss in one object using it.
@@ -74,7 +74,7 @@ Cons:
 I think of these 3 systems, the Step Timer is probably the most common one, and probably the one that people would find most favorable due to the simplicity to add to it compared to Object-based events or Timelines. One through-line with these 3 systems though is that, each one has a con where another system makes up for it. Ultimately, while I do think Step Timers are probably the best standard implementation, their cons are something that are made up for by the other, less desirable systems.
 
 Enter a 4th system:
-### System 4: Declarative Timelines
+#### System 4: Declarative Timelines
 Pros:
 - Advances through a list of "events" which are strictly organized by what order they are defined in, making them simple to follow.
 - Can easily be written entirely in 1 object, and could even encompass several detached segments with carefully managed object persistence.
@@ -182,7 +182,7 @@ timeline_add_event(remilia_boss_timeline, "Ceiling Kunais", 60, 340,
 
 Here you can see the full setup for the very first attack of Boss 1, and you can even see a little of how the Skipping event comes into play here. As well, you can even get a glimpse into one of the things I changed in the last devlog I wrote, the enhanced Camera Effects! Here, I am creating a scene border camera effect during the init of this event, and defining all of its properties to move into the formation of borders on the top and bottom. In this case, the Skipping action for the init simply makes it so the border is fully stretched into place.
 
-## The Image Manipulation effect
+### The Image Manipulation effect
 Synthas has previously written an article detailing his work in adding Materials to K3+. Since then, I have been using them to expand my workflow greatly, both in the workings of platforming and bosses! The single most prominent usage of a material throughout the project comes in the form of Image Manipulation, which allows you to modify the color properties of a texture. You can change the Hue, Saturation, Value, and you can even set how much the Hue modifies the color, and further still, you can set how much Grayscaling, and how much Inverting the texture has! 
 
 All these simple little things come together to make something great with Image Manipulation, and aside from improving some visual elements here and there, one place this has reaped great benefits is in the coloration of projectiles. I've lamented for a long time about the shortcomings of needing different subimages of a bullet sprite in order to make a bullet have different colors, and unfortunately image_blend alone doesn't cut it either because of how limited it is. With the advent of Image Manipulation however, now projectiles are greatly simplified! They don't need more than 1 color version, and they can even have a much greater range of colors now! In the previous section, you may have even spotted the implementation of this system. Let's take a closer look at it:
@@ -280,7 +280,7 @@ function projectile_draw_step() {
 
 Here, when the projectiles detect that the image manipulation shader is currently registered, it will change these uniforms per projectile, allowing them to have their own color setup!
 
-## Projectile Effect Manager
+### Projectile Effect Manager
 This is a rather involved topic that I am unable to properly do justice so I won't delve too deep into the weeds of it, but once again Synthas made another system, this time a much more sophisticated and involved system that allows pre-made vertex effects to be appended to projectiles. This system utilizes an extension created by Synthas, and led to the creation of a whole suite of extensions and tools for the project.
 
 Previously, projectiles had a couple pre-generated effects that could be created along-side them. This included things like fading trails, on-spawn and on-death effects, and more. These effects had a major shortcoming though in that, since they were objects, they were highly non-performant, alongside making the creation of projectiles much more complicated. Through great effort though, Synthas has created an extension that allows these effects to be created not unlike particles, but with their own range of special features that give them a lot of flexibility!
@@ -288,7 +288,7 @@ Previously, projectiles had a couple pre-generated effects that could be created
 ![](Runner_D3ODaTNfxo.gif)
 
 I believe I may have shown this gif previously, but I'm gonna post it again anyways because it's really sick. Here you can see an example of a pretty silly looking Projectile Effect that's been appended to these leek projectiles.
-## Visual Overhaul
+### Visual Overhaul
 If you thought that I simply adapted the original boss code to the new timelines with some system enhancements and code optimizations, you'd be wrong! I made **many** countless visual improvements to Boss 1! 
 
 There are so many I could talk about, but I keep many of them a surprise for those who play it! I will, however, show you a couple highlights of what came from this! Below, you can find examples of all the systems I mentioned above, and even more that I haven't mentioned. 
@@ -299,7 +299,7 @@ There are so many I could talk about, but I keep many of them a surprise for tho
 
 and with this concludes Boss 1. Currently, the gameplay is completely finished and stable. There are still a few visual effects I'm missing that I really want to implement before I can consider this boss "perfected". I will leave those visual changes as a surprise though for when Demo 3 is released!
 
-# Materials
+## Materials
 While Image Manipulation has definitely been on the forefront of material usage, there's more to talk about in regards to the usage of materials. 
 
 When I released Demo 2.1, known as Aesthetic Shades, the primary focus of that update was to overhaul the graphics in as many places as I could, to create visuals for things closer to my ideal vision. I got very, very close with most of them, but being that it was my first foray into shaders, m implementation of them was not necessarily the cleanest. With the addition of Materials, as well as the global Level Graphics system that Synthas made to streamline the setting of visuals on a per room basis, I have been able to utilize materials for the applications of those effects! Here's some examples!
@@ -400,7 +400,7 @@ and, perhaps, the beginnings of something new...?
 
 ![](Runner_440VLNvDeL.gif)
 
-# Scribble
+## Scribble
 For the uninitiated, Scribble is a robust Text Rendering extension for GameMaker, created by JujuAdams. It allows you to do a lot of things from giving text different in-line properties, customizing many elements of fonts, and rendering all sorts of effects onto text. My experience with it is relatively limited so I certainly may not be the best spokesperson for it, so I advise you to check them out if you're interested! 
 
 https://github.com/jujuadams/scribble 
@@ -417,7 +417,7 @@ In Fullscreen Mode
 
 I'm currently still testing the applications so the appearance of this text may change a little over time, but I am certainly excited to show more of what can be done!
 
-# The Future
+## The Future
 The last several weeks have been extremely laborious, and what I've shown you here isn't even the half of what all has changed. Currently, there is a rough draft of a practice system as mentioned in the section about Boss 1, though it may be quite a while before it's finalized. As for Boss 2, Refactoring of it will begin soon, and I'm optimistic that with all the available systems it will end up being very approachable. Practice for it will be much easier to create, though once again the finalized setup for it will probably wait until towards the end of Demo 3's development. and finally, in regards to Stage 3 I've put in a lot of work recently towards cleaning up issues in it and optimizing it to the best of my abilities. There's some things that still need to be handled before I proceed, but soon enough I intend to begin testing of Stage 3. Although it is not fully finished, I think there is enough of it that it can be presented to testers and start the process of refining it.
 
 The future is hopeful. Truthfully, I'd say I'm actually caught up now to right where I was originally before the Great Refactor Era began, with needing to improve and fix some elements of Boss 2. I truly believe we are in the home stretch now, and soon all of the new systems and learnings that I've built into my programming will pay their dividends.
