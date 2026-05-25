@@ -1,4 +1,4 @@
-Long time no see! Over the last month, great strides have been taken towards pushing towards the end of the Great Refactor Era. So much has changed that it would be difficult to catalogue all of it. Nonetheless, today I'm excited to share with you what has come from my recent progress!
+Long time no see! Over the last month, great strides have been taken towards pushing towards the end of the Great Refactor Era. So much has changed that it would be difficult to catalogue all of it. Nonetheless, today I'm excited to share with you what has come from my recent progress!
 
 # Remilia
 Since Boss 1 has been my primary area of focus for much of the last month, let's begin with the developments here. First, let's go back in time a bit to discuss how the project to refactor it began.
@@ -11,12 +11,13 @@ The original "boss" health bar, which was directly copied from base K3. Aside fr
 
 Now compare that to:
 
-![[Runner_YB271XJWfm.gif]]
+![](Runner_YB271XJWfm.gif)
+
 Boss 1's specific health bar, in this case a "Health bauble". Here you can see a little preview of how it shakes and the residual "damage bar" that decrements over time.
 
 and that's not all! I didn't stop at giving the bosses themselves unique health bars. In fact, even the intermissions feature their own health bars. Check this out!
 
-![[Runner_Px6qEE1waa.gif]]
+![](Runner_Px6qEE1waa.gif)
 
 ## Story of the progression after Health Bars
 After I finished making the new health bars, my next goal was to implement a better practice system before going back to where I left off in Stage 3. This better practice system was first and foremost meant to be a way to add full practice to Boss 2, which previously had a very limited degree of practice due to its sheer complexity. My goal was to correct this for the next update. To make a long story short, in order to put this better practice system in play, I was going to need to refactor Boss 2. This is certainly not a small task. 
@@ -282,15 +283,18 @@ Here, when the projectiles detect that the image manipulation shader is currentl
 This is a rather involved topic that I am unable to properly do justice so I won't delve too deep into the weeds of it, but once again Synthas made another system, this time a much more sophisticated and involved system that allows pre-made vertex effects to be appended to projectiles. This system utilizes an extension created by Synthas, and led to the creation of a whole suite of extensions and tools for the project.
 
 Previously, projectiles had a couple pre-generated effects that could be created along-side them. This included things like fading trails, on-spawn and on-death effects, and more. These effects had a major shortcoming though in that, since they were objects, they were highly non-performant, alongside making the creation of projectiles much more complicated. Through great effort though, Synthas has created an extension that allows these effects to be created not unlike particles, but with their own range of special features that give them a lot of flexibility!
-![[Runner_D3ODaTNfxo.gif]]
+
+![](Runner_D3ODaTNfxo.gif)
+
 I believe I may have shown this gif previously, but I'm gonna post it again anyways because it's really sick. Here you can see an example of a pretty silly looking Projectile Effect that's been appended to these leek projectiles.
 ## Visual Overhaul
 If you thought that I simply adapted the original boss code to the new timelines with some system enhancements and code optimizations, you'd be wrong! I made **many** countless visual improvements to Boss 1! 
 
 There are so many I could talk about, but I keep many of them a surprise for those who play it! I will, however, show you a couple highlights of what came from this! Below, you can find examples of all the systems I mentioned above, and even more that I haven't mentioned. 
 
-![[Runner_mbxsjk3nph.gif]]![[Runner_ov1aZR0CdL.gif]]
-![[Runner_gs8cjBEsxz.gif]]
+![](Runner_mbxsjk3nph.gif)
+![](Runner_ov1aZR0CdL.gif)
+![](Runner_gs8cjBEsxz.gif)
 
 and with this concludes Boss 1. Currently, the gameplay is completely finished and stable. There are still a few visual effects I'm missing that I really want to implement before I can consider this boss "perfected". I will leave those visual changes as a surprise though for when Demo 3 is released!
 
@@ -324,7 +328,8 @@ _level_graphics_info_map_add_if_not_exist(level_info_map, STAGE01_2A, _info);
 
 This is the setup for the first room of Giripossible. Here, you can see the shader setup function which defines the material used. Most rooms that have a dynamic background will utilize a process like this.
 
-![[Runner_4faQqWxe3H.gif]]
+![](Runner_4faQqWxe3H.gif)
+
 and of course, here is the wonderful result! A very simple way to apply to this effect, all by putting a material object in this room and having the Level Graphics system interact with it.
 
 ```gml
@@ -353,7 +358,9 @@ _level_graphics_info_map_add_if_not_exist(level_info_map, STAGE02_7A, _info);
 
 Another snippet, this time for Macaron-B. Here you can even see a glimpse into the feature Synthas showcased recently, where we add the material to the debug viewer, making it possible to preview its properties and modify them at runtime.
 
-![[Runner_OhsRSNshSV.gif]]Of course alongside the material enhancements we've made, there's been a few other improvements you may be able to spot if you look closely :P
+![](Runner_OhsRSNshSV.gif)
+
+Of course alongside the material enhancements we've made, there's been a few other improvements you may be able to spot if you look closely :P
 
 and, for those of you who are wondering, these things are not at all limited to the currently released content. Here's a little sneak peek of a more in-depth application of a material:
 
@@ -386,10 +393,11 @@ _info.shader_setup_function = function(inst) {
 _level_graphics_info_map_add_if_not_exist(level_info_map, STAGE03_1A, _info);
 ```
 
-![[Runner_ZfYbscXbgL.gif]]
+![](Runner_ZfYbscXbgL.gif)
+
 and, perhaps, the beginnings of something new...?
 
-![[Runner_440VLNvDeL.gif]]
+![](Runner_440VLNvDeL.gif)
 
 # Scribble
 For the uninitiated, Scribble is a robust Text Rendering extension for GameMaker, created by JujuAdams. It allows you to do a lot of things from giving text different in-line properties, customizing many elements of fonts, and rendering all sorts of effects onto text. My experience with it is relatively limited so I certainly may not be the best spokesperson for it, so I advise you to check them out if you're interested! 
@@ -398,10 +406,12 @@ https://github.com/jujuadams/scribble
 
 I had previously tried out Scribble a little bit many years ago, although at the time I was too concerned about other problems with the project and didn't end up fully implementing it. Now, I decided to give Scribble a try once again, and I'm very pleased with the results I've seen thus far! Through using Scribble, I have managed to reduce the number of fonts needed significantly, from like 30 to only a small handful. Not to mention, the text has become so much cleaner looking too, as well as how it's implemented!
 
-![[Pasted image 20260520193359.png|660]]
+![](Pasted%20image%2020260520193359.png)
+
 In Windowed Mode
 
-![[Pasted image 20260520193436.png]]
+![](Pasted%20image%2020260520193436.png)
+
 In Fullscreen Mode
 
 I'm currently still testing the applications so the appearance of this text may change a little over time, but I am certainly excited to show more of what can be done!

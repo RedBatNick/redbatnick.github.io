@@ -159,7 +159,7 @@ HIGHLIGHTJS_DIR :: "/highlightjs/"
 HTML_HEADER ::
 "<!doctype html>\n" +
 "<head>\n" +
-"   <title>Synthasmablogia</title>\n" +
+"   <title>Developer Logs</title>\n" +
 "   <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\" />\n" +
 "   <link href=\"/style.css\" rel=\"stylesheet\" />\n" +
 "	<link href=\"" + HIGHLIGHTJS_DIR + "styles/gml.min.css\" rel=\"stylesheet\" />\n" +
