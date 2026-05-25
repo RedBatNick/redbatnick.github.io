@@ -130,6 +130,7 @@ delete_recursive_ignore := []string {
 	"highlightjs",
 	"style.css",
 	"graphics.js",
+	"fonts",
 }
 
 delete_recursive :: proc(dir: string) -> os.Error {
