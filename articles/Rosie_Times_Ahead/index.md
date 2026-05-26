@@ -302,7 +302,9 @@ and with this concludes Boss 1. Currently, the gameplay is completely finished a
 ## Materials
 While Image Manipulation has definitely been on the forefront of material usage, there's more to talk about in regards to the usage of materials. 
 
-When I released Demo 2.1, known as Aesthetic Shades, the primary focus of that update was to overhaul the graphics in as many places as I could, to create visuals for things closer to my ideal vision. I got very, very close with most of them, but being that it was my first foray into shaders, m implementation of them was not necessarily the cleanest. With the addition of Materials, as well as the global Level Graphics system that Synthas made to streamline the setting of visuals on a per room basis, I have been able to utilize materials for the applications of those effects! Here's some examples!
+When I released Demo 2.1, known as Aesthetic Shades, the primary focus of that update was to overhaul the graphics in as many places as I could, to create visuals for things closer to my ideal vision. I got very, very close with most of them, but being that it was my first foray into shaders, my implementation of them was not necessarily the cleanest. 
+
+With the addition of Materials, as well as the global Level Graphics system that Synthas made to streamline the setting of visuals on a per room basis (you can read more about this here: [https://synthasmagoria.github.io/materials_in_gm/](https://synthasmagoria.github.io/materials_in_gm/)), I have been able to utilize materials for the applications of those effects! Here's some examples!
 
 ```gml
 _info = new LevelGraphicsInformation();
